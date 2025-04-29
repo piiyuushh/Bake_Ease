@@ -1,0 +1,145 @@
+@charset "UTF-8";
+/* Reset default spacing */
+body {
+    margin: 0;
+    padding: 0;
+}
+/* Top Banner */
+.top-bar {
+    background-color: #694e3f;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 1rem;
+    font-family: Arial, sans-serif;
+}
+/* Main Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #af734e;
+    padding: 15px 30px;
+    font-family: Arial, sans-serif;
+    color: white;
+}
+/* Left Section - Brand */
+.nav-left {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+.nav-left .brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+}
+/* Logo Styling */
+.logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+.logo-img:hover {
+    transform: scale(1.05);
+}
+/* Center Section - Navigation Links */
+.nav-center {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+    flex: 2;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.nav-center a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+    padding-bottom: 5px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+/* hover effects */
+.nav-center a {
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px; /* Slightly more rounded for a modern feel */
+    transition: background-color 0.3s ease, color 0.3s ease;
+    position: relative;
+}
+
+/* Disable the old underline hover */
+.nav-center a::after {
+    display: none;
+}
+
+/* Hover Effect */
+.nav-center a:hover {
+    background-color: white;
+    color: #af734e;
+}
+
+/* Active Link */
+.nav-center a.active {
+    background-color: white;
+    color: #694e3f; /* Darker color for the active state text */
+    font-weight: bolder;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2); /* subtle shadow for active */
+}
+
+/* Optional: On hover over active, keep it smooth */
+.nav-center a.active:hover {
+    background-color: #f5f5f5; /* Slightly off-white hover for active */
+    color: #694e3f;
+}
+/* Right Section - Icons and Search */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    justify-content: flex-end;
+}
+/* Search Bar */
+.search-container {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+}
+.search-bar {
+    padding: 8px 15px;
+    width: 200px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    outline: none;
+}
+/* Profile and Dashboard Icons */
+.profile-link, .dashboard-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    margin-left: 10px;
+}
+.profile-img, .dashboard-img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none;
+    transition: transform 0.3s ease;
+}
+.profile-img:hover, .dashboard-img:hover {
+    transform: scale(1.1);
+}
