@@ -1,3 +1,4 @@
+/* Base Styling */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
@@ -6,25 +7,27 @@ body {
     color: #333;
 }
 
+/* Sidebar */
 .sidebar {
-    width: 250px;
     position: fixed;
     top: 0;
     left: 0;
+    width: 250px;
+    height: 100%;
     background-color: #333;
     color: #fff;
     padding: 20px;
-    height: 100%;
 }
 
 .sidebar-title {
     font-size: 24px;
-    margin-bottom: 20px;
     font-weight: bold;
+    margin-bottom: 20px;
     color: #fff;
 }
 
 .tab-btn {
+    display: block;
     width: 100%;
     padding: 10px;
     margin: 10px 0;
@@ -34,17 +37,21 @@ body {
     cursor: pointer;
     font-size: 18px;
     text-align: left;
+    border-radius: 5px;
+    transition: background-color 0.2s ease;
 }
 
 .tab-btn:hover {
     background-color: #e68a44;
 }
 
+/* Main Content */
 .main-content {
     margin-left: 270px;
     padding: 20px;
 }
 
+/* Tabs */
 .tab-content {
     display: none;
 }
@@ -53,14 +60,14 @@ body {
     display: block;
 }
 
+/* Dashboard Title */
 .dashboard-title {
     font-size: 28px;
-    margin-bottom: 20px;
     font-weight: bold;
-    color: #333;
+    margin-bottom: 20px;
 }
 
-/* Cards (dashboard metrics) */
+/* Dashboard Metrics */
 .dashboard-table {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -93,7 +100,7 @@ body {
     color: #af734e;
 }
 
-/* Welcome box */
+/* Welcome Box */
 .welcome-box {
     background-color: #f5f5f5;
     border-left: 6px solid #af734e;
@@ -102,19 +109,20 @@ body {
     border-radius: 8px;
 }
 
-/* Product table */
+/* Product Table */
 .product-table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
     font-size: 15px;
     background-color: #fff;
-    box-shadow: 0 0 8px rgba(0,0,0,0.05);
     border-radius: 6px;
     overflow: hidden;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 }
 
-.product-table th, .product-table td {
+.product-table th,
+.product-table td {
     padding: 12px 15px;
     border: 1px solid #ddd;
     text-align: left;
@@ -122,7 +130,7 @@ body {
 
 .product-table th {
     background-color: #af734e;
-    color: white;
+    color: #fff;
     font-weight: bold;
 }
 
@@ -130,21 +138,23 @@ body {
     background-color: #f9f9f9;
 }
 
+/* Go Back Button */
 .go-back-container {
     margin-top: 20px;
     text-align: center;
 }
 
 .go-back-btn {
-    background-color: #4CAF50; /* Green background */
+    display: inline-block;
+    background-color: #4CAF50;
     color: white;
     border: none;
     padding: 10px 20px;
-    text-align: center;
     font-size: 16px;
     cursor: pointer;
     border-radius: 5px;
     text-decoration: none;
+    transition: background-color 0.2s ease;
 }
 
 .go-back-btn:hover {

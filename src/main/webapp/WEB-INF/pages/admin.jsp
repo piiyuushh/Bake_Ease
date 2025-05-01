@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.bakeease.model.ProductModel" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.Set" %>
-<%@ page import="java.util.HashSet" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +8,7 @@
     <title>Admin Dashboard</title>
     <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/resources/assets/favicon.png" />
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/admin.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -48,40 +47,56 @@
             </div>
         </div>
 
+        <% List<ProductModel> productList = (List<ProductModel>) request.getAttribute("products"); %>
+        <% if (productList != null && !productList.isEmpty()) { %>
         <h3>Current Product Listings</h3>
-        <%
-            List<ProductModel> productList = (List<ProductModel>) request.getAttribute("products");
-            if (productList != null && !productList.isEmpty()) {
-        %>
-            <table class="product-table">
-                <thead>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (ProductModel product : productList) { %>
                     <tr>
-                        <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% for (ProductModel product : productList) { %>
-                        <tr>
+                        <form action="${pageContext.request.contextPath}/admin" method="post">
+                            <input type="hidden" name="id" value="<%= product.getId() %>">
                             <td><%= product.getId() %></td>
-                            <td><%= product.getName() %></td>
-                            <td><%= product.getDescription() %></td>
-                            <td>Rs. <%= product.getPrice() %></td>
-                            <td><%= product.getCategory() %></td>  <!-- Display Category -->
-                            <td><%= product.getTotalSales() %></td> <!-- Display Total Sales -->
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                            <td><input type="text" name="name" value="<%= product.getName() %>" required></td>
+                            <td><input type="text" name="description" value="<%= product.getDescription() %>" required></td>
+                            <td><input type="number" step="10" name="price" value="<%= product.getPrice() %>" required></td>
+                            <td>
+                                <select name="category" required>
+								    <option value="" disabled selected>Select Category</option>
+								    <option value="Beverages" <%= "Beverages".equals(product.getCategory()) ? "selected" : "" %>>Beverages</option>
+								    <option value="Cakes and Pastries" <%= "Cakes and Pastries".equals(product.getCategory()) ? "selected" : "" %>>Cakes and Pastries</option>
+								    <option value="Baked" <%= "Baked".equals(product.getCategory()) ? "selected" : "" %>>Baked</option>
+								</select>
+                            </td>
+                            <td><input type="number" step="10" name="total_sales" value="<%= product.getTotalSales() %>" required></td>
+                            <td>
+                                <button type="submit" name="action" value="update">Update</button>
+                                <button type="submit" name="action" value="delete" onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
+                            </td>
+                        </form>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
         <% } else { %>
             <p>No products available.</p>
         <% } %>
+
+        <!-- Bar Graph for Product Sales -->
+        <div class="dashboard-chart">
+            <canvas id="productSalesChart" width="400" height="200"></canvas>
+        </div>
     </div>
 
     <!-- Products Tab -->
     <div id="products" class="tab-content">
         <h2>Manage Products</h2>
 
-        <!-- Add Product Form -->
         <form action="${pageContext.request.contextPath}/admin" method="post" class="product-form">
             <input type="hidden" name="action" value="add">
             <input type="text" name="name" placeholder="Product Name" required>
@@ -97,29 +112,26 @@
             <button type="submit">Add Product</button>
         </form>
 
-        <!-- View Product List -->
-        <%
-            if (productList != null && !productList.isEmpty()) {
-        %>
-            <table class="product-table">
-                <thead>
+        <% if (productList != null && !productList.isEmpty()) { %>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (ProductModel product : productList) { %>
                     <tr>
-                        <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
+                        <td><%= product.getId() %></td>
+                        <td><%= product.getName() %></td>
+                        <td><%= product.getDescription() %></td>
+                        <td>Rs. <%= product.getPrice() %></td>
+                        <td><%= product.getCategory() %></td>
+                        <td><%= product.getTotalSales() %></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <% for (ProductModel product : productList) { %>
-                        <tr>
-                            <td><%= product.getId() %></td>
-                            <td><%= product.getName() %></td>
-                            <td><%= product.getDescription() %></td>
-                            <td>Rs. <%= product.getPrice() %></td>
-                            <td><%= product.getCategory() %></td>  <!-- Display Category -->
-                            <td><%= product.getTotalSales() %></td> <!-- Display Total Sales -->
-                        </tr>
-                    <% } %>
-                </tbody>
-            </table>
+                <% } %>
+            </tbody>
+        </table>
         <% } else { %>
             <p>No products available.</p>
         <% } %>
@@ -133,7 +145,6 @@
 </div>
 
 <script>
-// Function to show active tab
 function showTab(tabName) {
     var tabs = document.getElementsByClassName('tab-content');
     for (var i = 0; i < tabs.length; i++) {
@@ -142,10 +153,49 @@ function showTab(tabName) {
     document.getElementById(tabName).classList.add('active');
 }
 
-// Keep tab active after form submit
 window.onload = function () {
     var activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : "dashboard" %>";
     showTab(activeTab);
+
+    // Load chart only if dashboard is active
+    if (activeTab === 'dashboard') {
+        const ctx = document.getElementById('productSalesChart').getContext('2d');
+        const productNames = [
+            <% for (ProductModel product : productList) { %>"<%= product.getName() %>",<% } %>
+        ];
+        const productSales = [
+            <% for (ProductModel product : productList) { %><%= product.getTotalSales() %>,<% } %>
+        ];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: productNames,
+                datasets: [{
+                    label: 'Total Sales',
+                    data: productSales,
+                    backgroundColor: 'rgba(175, 115, 78, 0.7)',
+                    borderColor: 'rgba(175, 115, 78, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Product Sales Overview'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
 };
 </script>
 

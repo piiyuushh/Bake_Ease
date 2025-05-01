@@ -1,28 +1,28 @@
 @charset "UTF-8";
+
+/* ===== General Body Styling ===== */
 body {
     font-family: Arial, sans-serif;
-    background: #f6f3f0;
+    background-color: #f6f3f0;
+    margin: 0;
     padding: 20px;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    margin: 0;
 }
 
+/* ===== Container ===== */
 .container {
     display: flex;
     max-width: 1000px;
-    background: #fff;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
     border-radius: 10px;
     overflow: hidden;
-    margin: 0;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
-
-
-/* Left Profile Section */
+/* ===== Left Profile Section ===== */
 .profile-card {
     width: 35%;
     background-color: #af734e;
@@ -51,8 +51,10 @@ body {
 .details {
     text-align: left;
     margin-top: 20px;
+    font-size: 14px;
 }
 
+/* View Profile Button */
 .view-btn {
     background-color: #fff;
     color: #af734e;
@@ -60,11 +62,16 @@ body {
     padding: 10px 20px;
     border-radius: 20px;
     cursor: pointer;
-    margin-top: 20px;
     font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
 }
 
-/* Right Form Section */
+.view-btn:hover {
+    background-color: #f5e1d3;
+}
+
+/* ===== Right Form Section ===== */
 .form-section {
     width: 65%;
     padding: 40px;
@@ -91,23 +98,28 @@ input[type="file"] {
     margin-top: 5px;
     border-radius: 5px;
     border: 1px solid #ccc;
+    font-size: 15px;
+    box-sizing: border-box;
 }
 
+/* Submit Button */
 .edit-btn {
     background-color: #af734e;
     color: white;
     padding: 12px 25px;
-    margin-top: 20px;
+    margin-top: 25px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .edit-btn:hover {
     background-color: #955d3f;
 }
+
+/* Home Button */
 .home-btn {
     margin-top: 10px;
     background-color: #af734e;
@@ -116,10 +128,49 @@ input[type="file"] {
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    text-decoration: none; /* removes underline */
-    transition: background-color 0.3s ease; /* smooth background transition */
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .home-btn:hover {
     background-color: #8c5a3d;
+}
+
+/* ===== Alert Messages ===== */
+.alert {
+    width: 100%;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 20px;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* ===== Responsive Adjustment ===== */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .profile-card,
+    .form-section {
+        width: 100%;
+        padding: 20px;
+    }
+
+    .form-section {
+        padding-top: 0;
+    }
 }

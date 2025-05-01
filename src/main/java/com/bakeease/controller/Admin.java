@@ -101,7 +101,22 @@ public class Admin extends HttpServlet {
 
                 productService.updateProduct(product);
 
-                response.sendRedirect("admin?action=viewProducts");
+                request.setAttribute("successMessage", "Product updated successfully!");
+
+                List<ProductModel> products = productService.getAllProducts();
+                double totalSalesSum = 0;
+                for (ProductModel prod : products) {
+                    totalSalesSum += prod.getTotalSales();
+                }
+                
+                request.setAttribute("products", products);
+                request.setAttribute("totalSales", totalSalesSum);
+                request.setAttribute("items", products.size());
+                request.setAttribute("categories", 3); // Static
+                request.setAttribute("customers", 450); // Static
+                request.setAttribute("activeTab", "products");
+
+                request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error updating product.");
@@ -110,7 +125,23 @@ public class Admin extends HttpServlet {
             try {
                 int id = Integer.parseInt(request.getParameter("id"));
                 productService.deleteProduct(id);
-                response.sendRedirect("admin?action=viewProducts");
+
+                request.setAttribute("successMessage", "Product deleted successfully!");
+
+                List<ProductModel> products = productService.getAllProducts();
+                double totalSalesSum = 0;
+                for (ProductModel prod : products) {
+                    totalSalesSum += prod.getTotalSales();
+                }
+
+                request.setAttribute("products", products);
+                request.setAttribute("totalSales", totalSalesSum);
+                request.setAttribute("items", products.size());
+                request.setAttribute("categories", 3); // Static
+                request.setAttribute("customers", 450); // Static
+                request.setAttribute("activeTab", "products");
+
+                request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
             } catch (Exception e) {
                 e.printStackTrace();
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error deleting product.");
