@@ -12,7 +12,7 @@ import java.io.IOException;
 public class AuthenticationFilter implements Filter {
 
     private static final String[] PUBLIC_PATHS = {
-        "/", "/home", "/about", "/login", "/register", "/contact"
+        "/", "/home", "/about", "/login", "/register", "/contact", "/product"
     };
 
     @Override

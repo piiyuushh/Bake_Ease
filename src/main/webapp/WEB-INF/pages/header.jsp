@@ -20,6 +20,7 @@
         </div>
         <div class="nav-center">
             <a href="${pageContext.request.contextPath}/home">Home</a>
+            <a href="${pageContext.request.contextPath}/product">Products</a>
             <a href="${pageContext.request.contextPath}/about">About Us</a>
             <a href="${pageContext.request.contextPath}/contact">Contact</a>
             <a href="${pageContext.request.contextPath}/profile">Profile</a>
