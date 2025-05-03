@@ -18,69 +18,147 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - BakeEase</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div class="container">
-
-    <%-- Alert Messages --%>
+<div class="profile-container">
+    <%-- Error Message --%>
     <% if (errorMessage != null) { %>
-        <div class="alert error"><%= errorMessage %></div>
-    <% } else if (successMessage != null) { %>
-        <div class="alert success"><%= successMessage %></div>
+        <div class="alert-message error">
+            <span><%= errorMessage %></span>
+            <button class="close-btn">&times;</button>
+        </div>
     <% } %>
 
-    <%-- Profile Content --%>
+    <div class="profile-header">
+        <h1>My Profile</h1>
+        <p>Account Control Center</p>
+    </div>
+
     <% if (user != null) { %>
-    
-        <%-- Left: Profile Card --%>
+    <div class="profile-content">
+        <%-- Profile Card --%>
         <div class="profile-card">
-            <img src="<%= imagePath %>" alt="Profile Image" class="profile-img">
-            <h2><%= user.getUsername() %></h2>
-            <p><%= user.getRole() %></p>
-
-            <div class="details">
-                <p><strong>Username:</strong> <%= user.getUsername() %></p>
-                <p><strong>Email:</strong> <%= user.getEmail() %></p>
-                <p><strong>Phone:</strong> <%= user.getPhone() %></p>
+            <div class="profile-image-container">
+                <img src="<%= imagePath %>" alt="Profile Image" class="profile-image">
+                <div class="image-overlay">
+                    <label for="profileImage" class="upload-btn">Change Photo</label>
+                </div>
             </div>
-
-            <button class="view-btn">View Public Profile</button>
+            
+            <div class="profile-info">
+                <h2><%= user.getUsername() %></h2>
+                <p class="role-badge"><%= user.getRole() %></p>
+                
+            </div>
         </div>
 
-        <%-- Right: Update Form --%>
-        <div class="form-section">
-            <h2>Update Profile</h2>
-
-            <form action="<%= contextPath %>/updateprofile" method="post" enctype="multipart/form-data">
+        <%-- Edit Form --%>
+        <div class="edit-form">
+            <form action="<%= contextPath %>/profile" method="post" enctype="multipart/form-data">
+                <input type="file" id="profileImage" name="profileImage" accept="image/*" style="display: none;">
                 
-                <label for="username">Username:</label>
-                <input type="text" id="username" name="username" value="<%= user.getUsername() %>" required>
-
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
-
-                <label for="phone">Phone Number:</label>
-                <input type="text" id="phone" name="phone" value="<%= user.getPhone() %>" required>
-
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" placeholder="Enter new password">
-
-                <label for="profileImage">Profile Image:</label>
-                <input type="file" id="profileImage" name="profileImage">
-
-                <button type="submit" class="edit-btn">Update</button>
-                <a href="<%= contextPath %>/home" class="home-btn">Go to Home</a>
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" value="<%= user.getUsername() %>" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" value="<%= user.getEmail() %>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" value="<%= user.getPhone() %>" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Change Password</label>
+                    <input type="password" id="password" name="password" placeholder="Enter new password">
+                    <small class="hint">Leave blank to keep current password</small>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="save-btn">Save Changes</button>
+                    <a href="<%= contextPath %>/home" class="cancel-btn">Back to Home</a>
+                </div>
             </form>
         </div>
-
+    </div>
     <% } else { %>
-        <p>User not found.</p>
+        <div class="not-found">
+            <img src="<%= contextPath %>/resources/assets/icons/user-not-found.svg" alt="User not found">
+            <h2>User not found</h2>
+            <p>We couldn't find your profile information</p>
+            <a href="<%= contextPath %>/home" class="home-link">Return to Homepage</a>
+        </div>
     <% } %>
-
 </div>
+
+<%-- Success Toast --%>
+<% if (successMessage != null) { %>
+    <div class="toast success">
+        <div class="toast-content">
+            <span class="toast-message"><%= successMessage %></span>
+        </div>
+        <button class="toast-close">&times;</button>
+    </div>
+<% } %>
+
+<script>
+    // Close buttons functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        // Close alert message
+        const closeButtons = document.querySelectorAll('.close-btn');
+        closeButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.parentElement.style.opacity = '0';
+                setTimeout(() => this.parentElement.remove(), 300);
+            });
+        });
+        
+        // Toast notification
+        const toast = document.querySelector('.toast');
+        if (toast) {
+            setTimeout(() => toast.classList.add('show'), 100);
+            
+            // Auto-close after 5 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+            
+            // Manual close
+            const closeBtn = toast.querySelector('.toast-close');
+            closeBtn.addEventListener('click', () => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            });
+        }
+        
+        // Preview image when selected
+        const fileInput = document.getElementById('profileImage');
+        const profileImage = document.querySelector('.profile-image');
+        
+        if (fileInput && profileImage) {
+            fileInput.addEventListener('change', function(e) {
+                if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImage.src = event.target.result;
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                }
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

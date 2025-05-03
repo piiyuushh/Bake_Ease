@@ -53,7 +53,7 @@
             }
         } 
         if (!found) { %>
-            <p>No products found matching your search.</p>
+            <p>No products found.</p>
         <% } %>
     </div>
 </div>

@@ -144,60 +144,60 @@
     </div>
 </div>
 
-<script>
-function showTab(tabName) {
-    var tabs = document.getElementsByClassName('tab-content');
-    for (var i = 0; i < tabs.length; i++) {
-        tabs[i].classList.remove('active');
-    }
-    document.getElementById(tabName).classList.add('active');
-}
-
-window.onload = function () {
-    var activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : "dashboard" %>";
-    showTab(activeTab);
-
-    // Load chart only if dashboard is active
-    if (activeTab === 'dashboard') {
-        const ctx = document.getElementById('productSalesChart').getContext('2d');
-        const productNames = [
-            <% for (ProductModel product : productList) { %>"<%= product.getName() %>",<% } %>
-        ];
-        const productSales = [
-            <% for (ProductModel product : productList) { %><%= product.getTotalSales() %>,<% } %>
-        ];
-
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: productNames,
-                datasets: [{
-                    label: 'Total Sales',
-                    data: productSales,
-                    backgroundColor: 'rgba(175, 115, 78, 0.7)',
-                    borderColor: 'rgba(175, 115, 78, 1)',
-                    borderWidth: 1,
-                    borderRadius: 5
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Product Sales Overview'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    }
-};
-</script>
+	<script>
+		function showTab(tabName) {
+		    var tabs = document.getElementsByClassName('tab-content');
+		    for (var i = 0; i < tabs.length; i++) {
+		        tabs[i].classList.remove('active');
+		    }
+		    document.getElementById(tabName).classList.add('active');
+		}
+		
+		window.onload = function () {
+		    var activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : "dashboard" %>";
+		    showTab(activeTab);
+		
+		    // Load chart only if dashboard is active
+		    if (activeTab === 'dashboard') {
+		        const ctx = document.getElementById('productSalesChart').getContext('2d');
+		        const productNames = [
+		            <% for (ProductModel product : productList) { %>"<%= product.getName() %>",<% } %>
+		        ];
+		        const productSales = [
+		            <% for (ProductModel product : productList) { %><%= product.getTotalSales() %>,<% } %>
+		        ];
+		
+		        new Chart(ctx, {
+		            type: 'bar',
+		            data: {
+		                labels: productNames,
+		                datasets: [{
+		                    label: 'Total Sales',
+		                    data: productSales,
+		                    backgroundColor: 'rgba(175, 115, 78, 0.7)',
+		                    borderColor: 'rgba(175, 115, 78, 1)',
+		                    borderWidth: 1,
+		                    borderRadius: 5
+		                }]
+		            },
+		            options: {
+		                responsive: true,
+		                plugins: {
+		                    title: {
+		                        display: true,
+		                        text: 'Product Sales Overview'
+		                    }
+		                },
+		                scales: {
+		                    y: {
+		                        beginAtZero: true
+		                    }
+		                }
+		            }
+		        });
+		    }
+		};
+	</script>
 
 </body>
 </html>
