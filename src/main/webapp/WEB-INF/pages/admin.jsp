@@ -1,6 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.bakeease.model.ProductModel" %>
 <%@ page import="java.util.List" %>
+
+<%
+    List<ProductModel> productList = (List<ProductModel>) request.getAttribute("products");
+    String activeTab = (String) request.getAttribute("activeTab");
+    if (activeTab == null) activeTab = "home";
+    String successMessage = (String) request.getAttribute("successMessage");
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,19 +22,21 @@
 
 <div class="sidebar">
     <div class="sidebar-title">Admin</div>
+    <button class="tab-btn" onclick="showTab('home')">Home</button>
     <button class="tab-btn" onclick="showTab('dashboard')">Dashboard</button>
     <button class="tab-btn" onclick="showTab('products')">Products</button>
 </div>
 
 <div class="main-content">
-    <% String successMessage = (String) request.getAttribute("successMessage"); %>
+
     <% if (successMessage != null) { %>
         <div class="alert success"><%= successMessage %></div>
     <% } %>
 
+
     <!-- Dashboard Tab -->
-    <div id="dashboard" class="tab-content active">
-        <h2 class="dashboard-title">Admin Dashboard Overview</h2>
+    <div id="dashboard" class="tab-content <%= "dashboard".equals(activeTab) ? "active" : "" %>">
+        <h2 class="dashboard-title">Manage Products</h2>
 
         <div class="dashboard-table">
             <div class="dashboard-cell">
@@ -47,7 +57,6 @@
             </div>
         </div>
 
-        <% List<ProductModel> productList = (List<ProductModel>) request.getAttribute("products"); %>
         <% if (productList != null && !productList.isEmpty()) { %>
         <h3>Current Product Listings</h3>
         <table class="product-table">
@@ -67,11 +76,11 @@
                             <td><input type="number" step="10" name="price" value="<%= product.getPrice() %>" required></td>
                             <td>
                                 <select name="category" required>
-								    <option value="" disabled selected>Select Category</option>
-								    <option value="Beverages" <%= "Beverages".equals(product.getCategory()) ? "selected" : "" %>>Beverages</option>
-								    <option value="Cakes and Pastries" <%= "Cakes and Pastries".equals(product.getCategory()) ? "selected" : "" %>>Cakes and Pastries</option>
-								    <option value="Baked" <%= "Baked".equals(product.getCategory()) ? "selected" : "" %>>Baked</option>
-								</select>
+                                    <option value="" disabled>Select Category</option>
+                                    <option value="Beverages" <%= "Beverages".equals(product.getCategory()) ? "selected" : "" %>>Beverages</option>
+                                    <option value="Cakes and Pastries" <%= "Cakes and Pastries".equals(product.getCategory()) ? "selected" : "" %>>Cakes and Pastries</option>
+                                    <option value="Baked" <%= "Baked".equals(product.getCategory()) ? "selected" : "" %>>Baked</option>
+                                </select>
                             </td>
                             <td><input type="number" step="10" name="total_sales" value="<%= product.getTotalSales() %>" required></td>
                             <td>
@@ -83,19 +92,49 @@
                 <% } %>
             </tbody>
         </table>
+
         <% } else { %>
             <p>No products available.</p>
         <% } %>
+    </div>
+    
+    
+    <!-- Home Tab -->
+    <div id="home" class="tab-content <%= "home".equals(activeTab) ? "active" : "" %>">
+        <h2 class="dashboard-title">Product Overview</h2>
 
-        <!-- Bar Graph for Product Sales -->
+        <% if (productList != null && !productList.isEmpty()) { %>
+        <table class="product-table">
+            <thead>
+                <tr>
+                    <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (ProductModel product : productList) { %>
+                    <tr>
+                        <td><%= product.getId() %></td>
+                        <td><%= product.getName() %></td>
+                        <td><%= product.getDescription() %></td>
+                        <td>Rs. <%= product.getPrice() %></td>
+                        <td><%= product.getCategory() %></td>
+                        <td><%= product.getTotalSales() %></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+
         <div class="dashboard-chart">
             <canvas id="productSalesChart" width="400" height="200"></canvas>
         </div>
+        <% } else { %>
+            <p>No products available.</p>
+        <% } %>
     </div>
 
     <!-- Products Tab -->
-    <div id="products" class="tab-content">
-        <h2>Manage Products</h2>
+    <div id="products" class="tab-content <%= "products".equals(activeTab) ? "active" : "" %>">
+        <h2>Add Products</h2>
 
         <form action="${pageContext.request.contextPath}/admin" method="post" class="product-form">
             <input type="hidden" name="action" value="add">
@@ -142,62 +181,65 @@
             <button class="go-back-btn">Go Back to Home</button>
         </a>
     </div>
+
 </div>
 
-	<script>
-		function showTab(tabName) {
-		    var tabs = document.getElementsByClassName('tab-content');
-		    for (var i = 0; i < tabs.length; i++) {
-		        tabs[i].classList.remove('active');
-		    }
-		    document.getElementById(tabName).classList.add('active');
-		}
-		
-		window.onload = function () {
-		    var activeTab = "<%= request.getAttribute("activeTab") != null ? request.getAttribute("activeTab") : "dashboard" %>";
-		    showTab(activeTab);
-		
-		    // Load chart only if dashboard is active
-		    if (activeTab === 'dashboard') {
-		        const ctx = document.getElementById('productSalesChart').getContext('2d');
-		        const productNames = [
-		            <% for (ProductModel product : productList) { %>"<%= product.getName() %>",<% } %>
-		        ];
-		        const productSales = [
-		            <% for (ProductModel product : productList) { %><%= product.getTotalSales() %>,<% } %>
-		        ];
-		
-		        new Chart(ctx, {
-		            type: 'bar',
-		            data: {
-		                labels: productNames,
-		                datasets: [{
-		                    label: 'Total Sales',
-		                    data: productSales,
-		                    backgroundColor: 'rgba(175, 115, 78, 0.7)',
-		                    borderColor: 'rgba(175, 115, 78, 1)',
-		                    borderWidth: 1,
-		                    borderRadius: 5
-		                }]
-		            },
-		            options: {
-		                responsive: true,
-		                plugins: {
-		                    title: {
-		                        display: true,
-		                        text: 'Product Sales Overview'
-		                    }
-		                },
-		                scales: {
-		                    y: {
-		                        beginAtZero: true
-		                    }
-		                }
-		            }
-		        });
-		    }
-		};
-	</script>
+<script>
+    function showTab(tabName) {
+        var tabs = document.getElementsByClassName('tab-content');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].classList.remove('active');
+        }
+        document.getElementById(tabName).classList.add('active');
+    }
+
+    window.onload = function () {
+        const activeTab = "<%= activeTab %>";
+        showTab(activeTab);
+
+        const names = [<% for (ProductModel p : productList) { %>"<%= p.getName() %>",<% } %>];
+        const sales = [<% for (ProductModel p : productList) { %><%= p.getTotalSales() %>,<% } %>];
+
+        if (activeTab === 'home') {
+            renderChart('productSalesChart', names, sales);
+        } else if (activeTab === 'home') {
+            renderChart('homeProductSalesChart', names, sales);
+        }
+    };
+
+    function renderChart(canvasId, labels, data) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Sales',
+                    data: data,
+                    backgroundColor: 'rgba(175, 115, 78, 0.7)',
+                    borderColor: 'rgba(175, 115, 78, 1)',
+                    borderWidth: 1,
+                    borderRadius: 5
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Product Sales Overview'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
 
 </body>
 </html>
+
