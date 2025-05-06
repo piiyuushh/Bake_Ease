@@ -1,0 +1,131 @@
+@charset "UTF-8";
+
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f5f2;
+    color: #333;
+}
+
+.product-page {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.product-page h1 {
+    font-size: 2.5rem;
+    color: #af734e;
+    margin-bottom: 40px;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.search-form input[type="text"] {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.search-form button {
+    padding: 10px 20px;
+    background-color: #af734e;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #8f5c3c;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+}
+
+.product-card {
+    background-color: #fff;
+    border: 2px solid #e2d5cd;
+    border-left: 6px solid #af734e;
+    border-radius: 10px;
+    padding: 18px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.product-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 10px;
+}
+
+.product-header h3 {
+    font-size: 1.4rem;
+    color: #333;
+    margin: 0;
+}
+
+.product-header .price {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #af734e;
+}
+
+.category {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.desc {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+.total-sales {
+    font-size: 0.9rem;
+    color: #999;
+    margin-bottom: 20px;
+}
+
+.card-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.order-btn {
+    background-color: #af734e;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+}
+
+.order-btn:hover {
+    background-color: #8d5839;
+}
