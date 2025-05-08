@@ -51,25 +51,6 @@
     <div id="dashboard" class="tab-content <%= "dashboard".equals(activeTab) ? "active" : "" %>">
         <h2 class="dashboard-title">Manage Products</h2>
 
-        <div class="dashboard-table">
-            <div class="dashboard-cell">
-                <div class="dashboard-label">Total Sales</div>
-                <div class="dashboard-value">Rs. <%= request.getAttribute("totalSales") != null ? request.getAttribute("totalSales") : 0 %></div>
-            </div>
-            <div class="dashboard-cell">
-                <div class="dashboard-label">Items</div>
-                <div class="dashboard-value"><%= request.getAttribute("items") != null ? request.getAttribute("items") : 0 %></div>
-            </div>
-            <div class="dashboard-cell">
-                <div class="dashboard-label">Categories</div>
-                <div class="dashboard-value"><%= request.getAttribute("categories") != null ? request.getAttribute("categories") : 0 %></div>
-            </div>
-            <div class="dashboard-cell">
-                <div class="dashboard-label">Customers</div>
-                <div class="dashboard-value"><%= request.getAttribute("customers") != null ? request.getAttribute("customers") : 0 %></div>
-            </div>
-        </div>
-
         <% if (productList != null && !productList.isEmpty()) { %>
             <h3>Current Product Listings</h3>
             <table class="product-table">
@@ -112,7 +93,30 @@
 
     <!-- Home Tab -->
     <div id="home" class="tab-content <%= "home".equals(activeTab) ? "active" : "" %>">
-        <h2 class="dashboard-title">Product Overview</h2>
+     <h2 class="dashboard-title">Product Overview</h2>
+        <div class="dashboard-table">
+    <div class="dashboard-cell">
+        <div class="dashboard-label">Total Sales</div>
+        <div class="dashboard-value">Rs. <%= request.getAttribute("totalSales") != null ? request.getAttribute("totalSales") : 0 %></div>
+    </div>
+    <div class="dashboard-cell">
+        <div class="dashboard-label">Total Products</div>
+        <div class="dashboard-value"><%= request.getAttribute("items") != null ? request.getAttribute("items") : 0 %></div>
+    </div>
+    <div class="dashboard-cell">
+        <div class="dashboard-label">Product Categories</div>
+        <div class="dashboard-value"><%= request.getAttribute("categories") != null ? request.getAttribute("categories") : 0 %></div>
+    </div>
+    <div class="dashboard-cell">
+        <div class="dashboard-label">Registered Customers</div>
+        <div class="dashboard-value"><%= request.getAttribute("customers") != null ? request.getAttribute("customers") : 0 %></div>
+    </div>
+    <div class="dashboard-cell">
+        <div class="dashboard-label">Best Selling Item</div>
+        <div class="dashboard-value"><%= request.getAttribute("bestSellingProduct") != null ? request.getAttribute("bestSellingProduct") : 0 %></div>
+    </div>
+</div>
+
 
         <% if (productList != null && !productList.isEmpty()) { %>
             <table class="product-table">

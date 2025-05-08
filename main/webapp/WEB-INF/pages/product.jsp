@@ -25,7 +25,7 @@
 
     <!-- Search Bar -->
     <form method="get" action="product" class="search-form">
-        <input type="text" name="search" placeholder="Search by name or description..." value="<%= keyword %>"/>
+        <input type="text" name="search" placeholder="Search by Name or Category" value="<%= keyword %>"/>
         <button type="submit">Search</button>
     </form>
 
@@ -36,7 +36,7 @@
             for (ProductModel product : products) {
                 boolean match = keyword.isEmpty() ||
                                 product.getName().toLowerCase().contains(keyword) ||
-                                product.getDescription().toLowerCase().contains(keyword);
+                				product.getCategory().toLowerCase().contains(keyword);
                 if (match) {
                     found = true;
         %>

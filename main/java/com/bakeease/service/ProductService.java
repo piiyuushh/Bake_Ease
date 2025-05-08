@@ -110,6 +110,26 @@ public class ProductService {
             e.printStackTrace();
         }
     }
+    
+ // Method to get the name of the best-selling product
+    public String getBestSellingProduct() {
+        String query = "SELECT name FROM products ORDER BY total_sales DESC LIMIT 1";
+
+        try (Connection conn = DbConfig.getDbConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getString("name");
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     // Reusable method to extract product data from ResultSet
     private ProductModel extractProductFromResultSet(ResultSet rs) throws SQLException {

@@ -84,4 +84,23 @@ public class UserService {
             return stmt.executeUpdate() > 0;
         }
     }
+    
+    // method to count the number of customers
+    public int countCustomers() {
+        String query = "SELECT COUNT(*) AS customer_count FROM users WHERE role = 'customer'";
+
+        try (Connection conn = DbConfig.getDbConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt("customer_count");
+            }
+
+        } catch (SQLException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

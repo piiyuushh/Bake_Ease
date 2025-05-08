@@ -55,8 +55,9 @@ public class Admin extends HttpServlet {
             double totalSales = products.stream().mapToDouble(ProductModel::getTotalSales).sum();
             int items = products.size();
             int categories = 3;
-            int customers = 450;
+            int customers = userService.countCustomers();
             int orders = products.size();
+            String getBestSellingProductName = productService.getBestSellingProduct();
 
             request.setAttribute("totalSales", totalSales);
             request.setAttribute("items", items);
@@ -64,7 +65,7 @@ public class Admin extends HttpServlet {
             request.setAttribute("customers", customers);
             request.setAttribute("orders", orders);
             request.setAttribute("products", products);
-
+            request.setAttribute("bestSellingProduct", getBestSellingProductName);
             request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
         }
     }
