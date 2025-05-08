@@ -24,6 +24,7 @@ body {
     font-weight: bold;
     margin-bottom: 20px;
     color: #fff;
+	text-align: center;
 }
 
 .tab-btn {
@@ -168,11 +169,11 @@ body {
 }
 
 .profile-image {
-    width: 80px;
-    height: 80px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #af734e;
+    border: 3px solid #d8a521;
     cursor: pointer;
 }
 
@@ -316,4 +317,12 @@ body {
     color: #666;
 }
 
-/* Rest of your existing CSS remains the same */
+.username-display {
+    text-align: center;
+    margin-top: 10px;
+    color: #ffffff; /* White text for visibility */
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+}

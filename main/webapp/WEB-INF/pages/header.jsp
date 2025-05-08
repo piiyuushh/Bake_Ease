@@ -26,9 +26,6 @@
             <a href="${pageContext.request.contextPath}/profile">Profile</a>
         </div>
         <div class="nav-right">
-            <div class="search-container">
-                <input type="text" placeholder="Search Products" class="search-bar">
-            </div>
             <a href="${pageContext.request.contextPath}/login" class="profile-link">
                 <img src="${pageContext.request.contextPath}/resources/assets/profile.png" alt="Profile" class="profile-img" />
             </a>

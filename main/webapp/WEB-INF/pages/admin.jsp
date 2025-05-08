@@ -28,14 +28,16 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-
 <div class="sidebar">
     <div class="profile-section">
         <a href="${pageContext.request.contextPath}/profile">
             <img src="<%= imagePath %>" alt="Profile Image" class="profile-image">
         </a>
+        <% if (user != null && user.getUsername() != null) { %>
+            <div class="username-display"><%= user.getUsername() %></div>
+        <% } %>
     </div>
-    <div class="sidebar-title">Admin</div>
+    <div class="sidebar-title">Admin Control</div>
     <button class="tab-btn" onclick="showTab('home')">Dashboard</button>
     <button class="tab-btn" onclick="showTab('dashboard')">Manage Products</button>
     <button class="tab-btn" onclick="showTab('products')">Add Products</button>
@@ -116,7 +118,6 @@
         <div class="dashboard-value"><%= request.getAttribute("bestSellingProduct") != null ? request.getAttribute("bestSellingProduct") : 0 %></div>
     </div>
 </div>
-
 
         <% if (productList != null && !productList.isEmpty()) { %>
             <table class="product-table">
@@ -251,6 +252,5 @@
         });
     }
 </script>
-
 </body>
 </html>
