@@ -161,3 +161,17 @@ body {
 .go-back-btn:hover {
     background-color: #e68a44;
 }
+
+.profile-section {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.profile-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #af734e;
+    cursor: pointer;
+}

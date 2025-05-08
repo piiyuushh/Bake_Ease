@@ -1,9 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="com.bakeease.model.ProductModel" %>
 <%@ page import="java.util.List" %>
-
+<%@ page import="com.bakeease.model.UserModel" %>
 <%
-    // Ensure productList is accessible for entire page
+    UserModel user = (UserModel) request.getAttribute("user");
+    String contextPath = request.getContextPath();
+
+    String imageFileName = (user != null && user.getImage_path() != null && !user.getImage_path().isEmpty())
+            ? user.getImage_path()
+            : "default-image.png";
+
+    String imagePath = contextPath + "/resources/assets/customer-images/" + imageFileName;
+
     List<ProductModel> productList = (List<ProductModel>) request.getAttribute("products");
     String activeTab = (String) request.getAttribute("activeTab");
     if (activeTab == null) activeTab = "home";
@@ -22,10 +30,15 @@
 <body>
 
 <div class="sidebar">
+    <div class="profile-section">
+        <a href="${pageContext.request.contextPath}/profile">
+            <img src="<%= imagePath %>" alt="Profile Image" class="profile-image">
+        </a>
+    </div>
     <div class="sidebar-title">Admin</div>
-    <button class="tab-btn" onclick="showTab('home')">Home</button>
-    <button class="tab-btn" onclick="showTab('dashboard')">Dashboard</button>
-    <button class="tab-btn" onclick="showTab('products')">Products</button>
+    <button class="tab-btn" onclick="showTab('home')">Dashboard</button>
+    <button class="tab-btn" onclick="showTab('dashboard')">Manage Products</button>
+    <button class="tab-btn" onclick="showTab('products')">Add Products</button>
 </div>
 
 <div class="main-content">
@@ -33,7 +46,6 @@
     <% if (successMessage != null) { %>
         <div class="alert success"><%= successMessage %></div>
     <% } %>
-
 
     <!-- Dashboard Tab -->
     <div id="dashboard" class="tab-content <%= "dashboard".equals(activeTab) ? "active" : "" %>">
@@ -59,14 +71,14 @@
         </div>
 
         <% if (productList != null && !productList.isEmpty()) { %>
-        <h3>Current Product Listings</h3>
-        <table class="product-table">
-            <thead>
+            <h3>Current Product Listings</h3>
+            <table class="product-table">
+                <thead>
                 <tr>
                     <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th><th>Actions</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <% for (ProductModel product : productList) { %>
                     <tr>
                         <form action="${pageContext.request.contextPath}/admin" method="post">
@@ -91,27 +103,25 @@
                         </form>
                     </tr>
                 <% } %>
-            </tbody>
-        </table>
-
+                </tbody>
+            </table>
         <% } else { %>
             <p>No products available.</p>
         <% } %>
     </div>
-    
-    
+
     <!-- Home Tab -->
     <div id="home" class="tab-content <%= "home".equals(activeTab) ? "active" : "" %>">
         <h2 class="dashboard-title">Product Overview</h2>
 
         <% if (productList != null && !productList.isEmpty()) { %>
-        <table class="product-table">
-            <thead>
+            <table class="product-table">
+                <thead>
                 <tr>
                     <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <% for (ProductModel product : productList) { %>
                     <tr>
                         <td><%= product.getId() %></td>
@@ -122,18 +132,18 @@
                         <td><%= product.getTotalSales() %></td>
                     </tr>
                 <% } %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        <div class="dashboard-chart">
-            <canvas id="productSalesChart" width="400" height="200"></canvas>
-        </div>
+            <div class="dashboard-chart">
+                <canvas id="productSalesChart" width="400" height="200"></canvas>
+            </div>
         <% } else { %>
             <p>No products available.</p>
         <% } %>
     </div>
 
-    <!-- Products Tab -->
+    <!-- Add Products Tab -->
     <div id="products" class="tab-content <%= "products".equals(activeTab) ? "active" : "" %>">
         <h2>Add Products</h2>
 
@@ -153,13 +163,13 @@
         </form>
 
         <% if (productList != null && !productList.isEmpty()) { %>
-        <table class="product-table">
-            <thead>
+            <table class="product-table">
+                <thead>
                 <tr>
                     <th>ID</th><th>Name</th><th>Description</th><th>Price</th><th>Category</th><th>Total Sales</th>
                 </tr>
-            </thead>
-            <tbody>
+                </thead>
+                <tbody>
                 <% for (ProductModel product : productList) { %>
                     <tr>
                         <td><%= product.getId() %></td>
@@ -170,8 +180,8 @@
                         <td><%= product.getTotalSales() %></td>
                     </tr>
                 <% } %>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
         <% } else { %>
             <p>No products available.</p>
         <% } %>
@@ -187,9 +197,9 @@
 
 <script>
     function showTab(tabName) {
-        var tabs = document.getElementsByClassName('tab-content');
-        for (var i = 0; i < tabs.length; i++) {
-            tabs[i].classList.remove('active');
+        const tabs = document.getElementsByClassName('tab-content');
+        for (let tab of tabs) {
+            tab.classList.remove('active');
         }
         document.getElementById(tabName).classList.add('active');
     }
@@ -198,13 +208,10 @@
         const activeTab = "<%= activeTab %>";
         showTab(activeTab);
 
-        const names = [<% for (ProductModel p : productList) { %>"<%= p.getName() %>",<% } %>];
-        const sales = [<% for (ProductModel p : productList) { %><%= p.getTotalSales() %>,<% } %>];
-
         if (activeTab === 'home') {
+            const names = [<% for (ProductModel p : productList) { %>"<%= p.getName() %>",<% } %>];
+            const sales = [<% for (ProductModel p : productList) { %><%= p.getTotalSales() %>,<% } %>];
             renderChart('productSalesChart', names, sales);
-        } else if (activeTab === 'home') {
-            renderChart('homeProductSalesChart', names, sales);
         }
     };
 
@@ -243,4 +250,3 @@
 
 </body>
 </html>
-

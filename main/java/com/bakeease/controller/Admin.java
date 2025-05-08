@@ -1,12 +1,16 @@
 package com.bakeease.controller;
 
 import com.bakeease.model.ProductModel;
+import com.bakeease.model.UserModel;
 import com.bakeease.service.ProductService;
+import com.bakeease.service.UserService;
+
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,13 +18,29 @@ import java.util.List;
 @WebServlet("/admin")
 public class Admin extends HttpServlet {
     private static final long serialVersionUID = 1L;
-    private ProductService productService = new ProductService();
+
+    private final ProductService productService = new ProductService();
+    private final UserService userService = new UserService();
 
     public Admin() {
         super();
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Session and user authentication
+        HttpSession session = request.getSession(false);
+        if (session == null || session.getAttribute("username") == null) {
+            response.sendRedirect(request.getContextPath() + "/login");
+            return;
+        }
+
+        String username = (String) session.getAttribute("username");
+        UserModel user = userService.getUserByUsername(username);
+        if (user != null) {
+            request.setAttribute("user", user);
+        }
+
         String action = request.getParameter("action");
 
         if ("addProduct".equals(action)) {
@@ -31,15 +51,12 @@ public class Admin extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/pages/viewProducts.jsp").forward(request, response);
         } else {
             List<ProductModel> products = productService.getAllProducts();
-            double totalSales = 0;
-            for (ProductModel product : products) {
-                totalSales += product.getTotalSales(); // use total_sales
-            }
 
+            double totalSales = products.stream().mapToDouble(ProductModel::getTotalSales).sum();
             int items = products.size();
-            int categories = 3; // Static
-            int customers = 450; // Static
-            int orders = products.size(); // Static
+            int categories = 3;
+            int customers = 450;
+            int orders = products.size();
 
             request.setAttribute("totalSales", totalSales);
             request.setAttribute("items", items);
@@ -52,11 +69,12 @@ public class Admin extends HttpServlet {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
 
-        if ("add".equals(action)) {
-            try {
+        try {
+            if ("add".equals(action)) {
                 String name = request.getParameter("name");
                 String description = request.getParameter("description");
                 double price = Double.parseDouble(request.getParameter("price"));
@@ -71,19 +89,8 @@ public class Admin extends HttpServlet {
                 product.setTotalSales(totalSales);
 
                 productService.addProduct(product);
-
                 request.setAttribute("successMessage", "Product added successfully!");
-                List<ProductModel> products = productService.getAllProducts();
-                request.setAttribute("products", products);
-                request.setAttribute("activeTab", "products");
-
-                request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error adding product.");
-            }
-        } else if ("update".equals(action)) {
-            try {
+            } else if ("update".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 String name = request.getParameter("name");
                 String description = request.getParameter("description");
@@ -100,52 +107,17 @@ public class Admin extends HttpServlet {
                 product.setTotalSales(totalSales);
 
                 productService.updateProduct(product);
-
                 request.setAttribute("successMessage", "Product updated successfully!");
-
-                List<ProductModel> products = productService.getAllProducts();
-                double totalSalesSum = 0;
-                for (ProductModel prod : products) {
-                    totalSalesSum += prod.getTotalSales();
-                }
-                
-                request.setAttribute("products", products);
-                request.setAttribute("totalSales", totalSalesSum);
-                request.setAttribute("items", products.size());
-                request.setAttribute("categories", 3); // Static
-                request.setAttribute("customers", 450); // Static
-                request.setAttribute("activeTab", "products");
-
-                request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error updating product.");
-            }
-        } else if ("delete".equals(action)) {
-            try {
+            } else if ("delete".equals(action)) {
                 int id = Integer.parseInt(request.getParameter("id"));
                 productService.deleteProduct(id);
-
                 request.setAttribute("successMessage", "Product deleted successfully!");
-
-                List<ProductModel> products = productService.getAllProducts();
-                double totalSalesSum = 0;
-                for (ProductModel prod : products) {
-                    totalSalesSum += prod.getTotalSales();
-                }
-
-                request.setAttribute("products", products);
-                request.setAttribute("totalSales", totalSalesSum);
-                request.setAttribute("items", products.size());
-                request.setAttribute("categories", 3); // Static
-                request.setAttribute("customers", 450); // Static
-                request.setAttribute("activeTab", "products");
-
-                request.getRequestDispatcher("/WEB-INF/pages/admin.jsp").forward(request, response);
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Error deleting product.");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("successMessage", "An error occurred while processing the request.");
         }
+
+        doGet(request, response);
     }
 }

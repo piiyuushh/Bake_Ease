@@ -21,6 +21,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - BakeEase</title>
     <link rel="stylesheet" href="<%= contextPath %>/css/profile.css">
+        <link rel="icon" type="image/png" href="${pageContext.request.contextPath}/resources/assets/favicon.png" />
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -80,9 +82,8 @@
                 
                 <div class="form-group">
                     <label for="password">Change Password</label>
-                    <input type="password" id="password" name="password" placeholder="Enter new password">
-                    <small class="hint">Leave blank to keep current password</small>
-                    <small class="hint">Please enter the current password if you don't want to update it before updating your profile.</small>
+                    <input type="password" id="password" name="password" placeholder="Enter new password" required>
+                    <small class="hint">* Please enter the current password if you don't want to update it before updating your profile. *</small>
                 </div>
                 
                 <div class="form-actions">
