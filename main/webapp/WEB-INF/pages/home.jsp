@@ -29,21 +29,33 @@
                     <img src="${pageContext.request.contextPath}/resources/products-images/african cake.png" alt="African Cake">
                     <h3>African Cake</h3>
                     <p>Rich, moist, and full of cocoa goodness.</p>
+                  <a href="${pageContext.request.contextPath}/product">
+		            <button class="order-btn">Order Now</button>
+		        </a>
                 </div>
                 <div class="product-card">
                     <img src="${pageContext.request.contextPath}/resources/products-images/birthday cake.png" alt="Birthday Cake">
                     <h3>Birthday Cake</h3>
                     <p>Perfect crust with a soft, chewy interior.</p>
+                    <a href="${pageContext.request.contextPath}/product">
+		            <button class="order-btn">Order Now</button>
+		        </a>
+               </div>
+                <div class="product-card">
+                    <img src="${pageContext.request.contextPath}/resources/products-images/creampied doughnuts.png" alt="Doughnuts">
+                    <h3>Doughnuts</h3>
+                    <p>Crispy edges, soft center, sweet perfection.</p>
+                    <a href="${pageContext.request.contextPath}/product">
+		            <button class="order-btn">Order Now</button>
+		        </a>
                 </div>
                 <div class="product-card">
                     <img src="${pageContext.request.contextPath}/resources/products-images/creampied doughnuts.png" alt="Doughnuts">
                     <h3>Doughnuts</h3>
                     <p>Crispy edges, soft center, sweet perfection.</p>
-                </div>
-                <div class="product-card">
-                    <img src="${pageContext.request.contextPath}/resources/products-images/creampied doughnuts.png" alt="Doughnuts">
-                    <h3>Doughnuts</h3>
-                    <p>Crispy edges, soft center, sweet perfection.</p>
+                    <a href="${pageContext.request.contextPath}/product">
+		            <button class="order-btn">Order Now</button>
+		        </a>
                 </div>
             </div>
         </section>

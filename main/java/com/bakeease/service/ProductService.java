@@ -7,9 +7,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The ProductService class provides methods for interacting with the products in the database.
+ * It includes functionality for retrieving, searching, adding, updating, deleting products,
+ * and determining the best-selling product.
+ */
 public class ProductService {
 
-    // Method to get all products
+    /**
+     * Retrieves all products from the database.
+     *
+     * @return a list of all products available in the database
+     */
     public List<ProductModel> getAllProducts() {
         List<ProductModel> products = new ArrayList<>();
         String query = "SELECT * FROM products";
@@ -30,7 +39,13 @@ public class ProductService {
         return products;
     }
 
-    // Method to search products based on query
+    /**
+     * Searches for products based on the given search term.
+     * The search term is matched against product name, description, and category.
+     *
+     * @param searchTerm the search term to use for matching product attributes
+     * @return a list of products that match the search term
+     */
     public List<ProductModel> searchProducts(String searchTerm) {
         List<ProductModel> products = new ArrayList<>();
         String query = "SELECT * FROM products WHERE LOWER(name) LIKE ? OR LOWER(description) LIKE ? OR LOWER(category) LIKE ?";
@@ -57,7 +72,11 @@ public class ProductService {
         return products;
     }
 
-    // Method to add a new product
+    /**
+     * Adds a new product to the database.
+     *
+     * @param product the product to add to the database
+     */
     public void addProduct(ProductModel product) {
         String query = "INSERT INTO products (name, description, price, category, total_sales) VALUES (?, ?, ?, ?, ?)";
 
@@ -76,7 +95,11 @@ public class ProductService {
         }
     }
 
-    // Method to update an existing product
+    /**
+     * Updates an existing product in the database.
+     *
+     * @param product the product to update
+     */
     public void updateProduct(ProductModel product) {
         String query = "UPDATE products SET name = ?, description = ?, price = ?, category = ?, total_sales = ? WHERE id = ?";
 
@@ -96,7 +119,11 @@ public class ProductService {
         }
     }
 
-    // Method to delete a product by ID
+    /**
+     * Deletes a product from the database by its ID.
+     *
+     * @param productId the ID of the product to delete
+     */
     public void deleteProduct(int productId) {
         String query = "DELETE FROM products WHERE id = ?";
 
@@ -110,8 +137,12 @@ public class ProductService {
             e.printStackTrace();
         }
     }
-    
- // Method to get the name of the best-selling product
+
+    /**
+     * Retrieves the name of the best-selling product based on total sales.
+     *
+     * @return the name of the best-selling product, or {@code null} if no products exist
+     */
     public String getBestSellingProduct() {
         String query = "SELECT name FROM products ORDER BY total_sales DESC LIMIT 1";
 
@@ -130,8 +161,14 @@ public class ProductService {
         return null;
     }
 
-
-    // Reusable method to extract product data from ResultSet
+    /**
+     * A reusable method to extract product data from a {@link ResultSet}.
+     * This method is used to convert a row of data from the database into a {@link ProductModel} object.
+     *
+     * @param rs the ResultSet containing the product data
+     * @return a ProductModel object populated with the data from the ResultSet
+     * @throws SQLException if there is an issue accessing the data from the ResultSet
+     */
     private ProductModel extractProductFromResultSet(ResultSet rs) throws SQLException {
         ProductModel product = new ProductModel();
         product.setId(rs.getInt("id"));

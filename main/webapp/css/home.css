@@ -120,3 +120,25 @@ body {
         align-items: center;
     }
 }
+
+.order-btn {
+  background-color: #af734e; /* warm brownish tone */
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-btn:hover {
+  background-color: #9e6745;
+  transform: translateY(-2px);
+}
+
+.order-btn:active {
+  transform: scale(0.97);
+}

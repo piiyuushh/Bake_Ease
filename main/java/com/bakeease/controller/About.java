@@ -8,22 +8,33 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Servlet implementation class About
+ * The About servlet handles HTTP requests for the "/about" URL.
+ * It is used to forward users to the "about.jsp" page located in the "WEB-INF/pages" directory.
+ * 
+ * This servlet responds to both GET and POST requests.
  */
 @WebServlet(asyncSupported = true, urlPatterns = { "/about" })
 public class About extends HttpServlet {
+    
 	private static final long serialVersionUID = 1L;
        
     /**
-     * @see HttpServlet#HttpServlet()
+     * Default constructor.
+     * Calls the superclass constructor (HttpServlet).
      */
     public About() {
         super();
-        // TODO Auto-generated constructor stub
+        // Default constructor
     }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * Handles GET requests for the "/about" URL.
+	 * Forwards the request to the "about.jsp" page.
+	 * 
+	 * @param req the HttpServletRequest object that contains the request the client made to the servlet
+	 * @param resp the HttpServletResponse object that contains the response the servlet returns to the client
+	 * @throws ServletException if the request could not be handled
+	 * @throws IOException if an input or output error is detected when the servlet handles the request
 	 */
     @Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,11 +42,16 @@ public class About extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * Handles POST requests for the "/about" URL.
+	 * Delegates handling to the doGet() method, treating POST requests the same as GET requests.
+	 * 
+	 * @param request the HttpServletRequest object that contains the request the client made to the servlet
+	 * @param response the HttpServletResponse object that contains the response the servlet returns to the client
+	 * @throws ServletException if the request could not be handled
+	 * @throws IOException if an input or output error is detected when the servlet handles the request
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-
 }

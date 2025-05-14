@@ -7,8 +7,18 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
+/**
+ * The RegisterService class provides methods for user registration.
+ * It handles adding new users to the database and checking for duplicate usernames or emails.
+ */
 public class RegisterService {
 
+    /**
+     * Adds a new user to the database.
+     * 
+     * @param user the UserModel object containing the user details to be added
+     * @return {@code true} if the user is successfully added, {@code false} otherwise
+     */
     public boolean addUser(UserModel user) {
         boolean isInserted = false;
 
@@ -36,7 +46,13 @@ public class RegisterService {
         return isInserted;
     }
 
-    // METHOD to check duplicate username/email
+    /**
+     * Checks if the given username or email already exists in the database.
+     * 
+     * @param username the username to check for duplication
+     * @param email the email to check for duplication
+     * @return {@code true} if the username or email already exists, {@code false} otherwise
+     */
     public boolean isDuplicateUsernameOrEmail(String username, String email) {
         String sql = "SELECT COUNT(*) FROM users WHERE username = ? OR email = ?";
         try (Connection conn = DbConfig.getDbConnection();

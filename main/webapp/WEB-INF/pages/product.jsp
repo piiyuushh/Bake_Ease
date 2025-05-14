@@ -58,7 +58,7 @@
         if (!found) { %>
             <p>No products found.</p>
         <% } %>
-    </div>
+    </div> 
 </div>
 
 <%@ include file="footer.jsp" %>

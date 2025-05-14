@@ -16,11 +16,21 @@ import jakarta.servlet.http.Part;
 
 import java.io.IOException;
 
+/**
+ * Servlet implementation class Register.
+ *
+ * Handles user registration by validating user input, checking for duplicates,
+ * encrypting passwords, uploading profile images, and persisting new users to the database.
+ *
+ * URL Pattern: /register
+ *
+ * Author: Piyush Karn
+ */
 @WebServlet("/register")
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024,
-    maxFileSize = 5 * 1024 * 1024,
-    maxRequestSize = 10 * 1024 * 1024
+    fileSizeThreshold = 1024 * 1024,       // 1MB buffer before writing to disk
+    maxFileSize = 5 * 1024 * 1024,         // Max file size: 5MB
+    maxRequestSize = 10 * 1024 * 1024      // Max request size: 10MB
 )
 public class Register extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -28,19 +38,40 @@ public class Register extends HttpServlet {
     private final RegisterService registerService = new RegisterService();
     private final ImageUtil imageUtil = new ImageUtil();
 
-    public Register() {
-        super();
-    }
-
+    /**
+     * Handles GET requests to display the registration page.
+     *
+     * @param request  the HttpServletRequest object that contains the request
+     * @param response the HttpServletResponse object that contains the response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         request.getRequestDispatcher("/WEB-INF/pages/register.jsp").forward(request, response);
     }
 
+    /**
+     * Handles POST requests to register a new user.
+     * This includes:
+     * - Input validation
+     * - Duplicate username/email check
+     * - Password encryption
+     * - Image file validation and upload
+     * - User creation and database persistence
+     *
+     * @param request  the HttpServletRequest object that contains the form data
+     * @param response the HttpServletResponse object that contains the response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
 
+        // Extract form fields
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
@@ -50,7 +81,7 @@ public class Register extends HttpServlet {
 
         boolean isValid = true;
 
-        // Validation checks
+        // Input validations
         if (Validationutil.isNullOrEmpty(username)) {
             request.setAttribute("usernameError", "Username is required.");
             isValid = false;
@@ -107,12 +138,13 @@ public class Register extends HttpServlet {
             }
         }
 
-        // Check for duplicate entries
+        // Check for duplicate username or email
         if (isValid && registerService.isDuplicateUsernameOrEmail(username, email)) {
             request.setAttribute("duplicateError", "Duplicate entries found. Please choose another username and email.");
             isValid = false;
         }
 
+        // If validation fails, reload form with entered values
         if (!isValid) {
             request.setAttribute("username", username);
             request.setAttribute("email", email);
@@ -121,6 +153,7 @@ public class Register extends HttpServlet {
             return;
         }
 
+        // Encrypt password before saving
         String encryptedPassword = PasswordUtil.encrypt(username, password);
         if (encryptedPassword == null) {
             request.setAttribute("error", "Error encrypting password. Try again.");
@@ -128,6 +161,7 @@ public class Register extends HttpServlet {
             return;
         }
 
+        // Create and register new user
         String role = "customer";
         UserModel user = new UserModel(username, email, phone, encryptedPassword, role, fileName);
 

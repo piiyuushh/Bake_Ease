@@ -14,9 +14,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * The UserService class provides methods for handling user-related operations,
+ * such as fetching a user by username, updating the user profile, and counting the number of customers.
+ */
 public class UserService {
 
-    // Get user by username
+    /**
+     * Fetches a user from the database by their username.
+     *
+     * @param username the username of the user to fetch
+     * @return a {@link UserModel} object representing the user, or {@code null} if no user was found
+     */
     public UserModel getUserByUsername(String username) {
         UserModel user = null;
         String query = "SELECT * FROM users WHERE username = ?";
@@ -44,7 +53,21 @@ public class UserService {
         return user;
     }
 
-    // Update user profile
+    /**
+     * Updates a user's profile information, including username, email, phone, password, and profile image.
+     *
+     * @param newUsername  the new username to set
+     * @param email        the new email to set
+     * @param phone        the new phone number to set
+     * @param password     the new password to set (can be {@code null} if no change)
+     * @param imagePart    the uploaded profile image (can be {@code null} if no change)
+     * @param currentUsername the current username of the user to update
+     * @param uploadPath   the directory path where profile images are saved
+     * @return {@code true} if the profile is successfully updated, {@code false} otherwise
+     * @throws SQLException          if a database error occurs
+     * @throws IOException           if an I/O error occurs during file upload
+     * @throws ClassNotFoundException if the database driver is not found
+     */
     public boolean updateUserProfile(String newUsername, String email, String phone, String password, Part imagePart, String currentUsername, String uploadPath)
             throws SQLException, IOException, ClassNotFoundException {
 
@@ -84,8 +107,12 @@ public class UserService {
             return stmt.executeUpdate() > 0;
         }
     }
-    
-    // method to count the number of customers
+
+    /**
+     * Counts the total number of users with the role "customer".
+     *
+     * @return the number of customers, or 0 if there was an error
+     */
     public int countCustomers() {
         String query = "SELECT COUNT(*) AS customer_count FROM users WHERE role = 'customer'";
 
